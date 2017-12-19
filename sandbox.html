@@ -58,51 +58,10 @@
 
 		<script>
       var example1 = new TypeIt('#example1', {
-        speed: 100,
-        strings: 'Just a <strong>bold</strong> string. Now it is longer because I am testing something!'
-      });
-
-      setTimeout(() => {
-        example1.forcePause();
-      }, 1000);
-
-      new TypeIt('#example2', {
         speed: 50,
-        strings: ['This is my first example.', 'It has several strings!']
-      });
-
-      new TypeIt('#example3', {
-        speed: 50,
-        strings: [
-          'This is my <strong>second</strong> example.',
-          'This should <strong>replace</strong> the second string!'
-        ],
-        breakLines: false
-      });
-
-      new TypeIt('#example4', {
-        speed: 50,
-        strings: ['My first string.', 'My second string.'],
+        strings: 'Just a <strong>bold</strong> string.',
         loop: true
       });
-
-      new TypeIt('#example5', {
-        speed: 100
-      })
-        .type('Here\'s my first sting.')
-        .pause(500)
-        .delete(4)
-        .pause(500)
-        .type('ring.')
-        .pause(500)
-        .delete()
-        .pause(500)
-        .options({
-          speed: 25
-        })
-        .type('And here it is faster!');
-
-      new TypeIt('#example6');
 		</script>
 	</body>
 </html>

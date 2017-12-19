@@ -64,7 +64,6 @@ export default class Instance {
         this.queue.push([this.options.breakLines ? this.break : this.delete]);
         this.insertPauseIntoQueue(this.queue.length);
       }
-
     });
   }
 
@@ -76,7 +75,6 @@ export default class Instance {
 
     var doc = document.implementation.createHTMLDocument();
     doc.body.innerHTML = string;
-    console.log(doc.body.children);
 
     //-- If it's designated, rake that bad boy for HTML tags and stuff.
     if (rake) {
@@ -303,6 +301,7 @@ export default class Instance {
       if(typeof character !== 'string') {
         this.elementContainer.appendChild(character);
         this.inTag = true;
+        this.next();
         return;
       }
 
