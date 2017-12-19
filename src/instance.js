@@ -59,11 +59,27 @@ export default class Instance {
 
       this.queueUpString(string);
 
-      //-- This is not the last string, so insert a pause for between strings.
+      //-- This is not the last string,
+      //-- so insert a pause for between strings.
       if (index + 1 < this.options.strings.length) {
-        this.queue.push([this.options.breakLines ? this.break : this.delete]);
+
+        if(this.options.breakLines) {
+          this.queue.push([this.break]);
+        } else {
+          this.queueUpDeletions(string);
+        }
+
         this.insertPauseIntoQueue(this.queue.length);
       }
+    });
+
+    console.log(this.queue);
+  }
+
+  queueUpDeletions(string) {
+    //-- Delete each character from this string.
+    string.split("").forEach((character) => {
+      this.queue.push([this.delete, 1]);
     });
   }
 
@@ -88,7 +104,7 @@ export default class Instance {
     //-- If an opening HTML tag is found and we're not already printing inside a tag
     if (
       this.options.html &&
-      (string[0].indexOf("<") !== -1 && string[0].indexOf("</") === -1)
+      (string[0].startsWith("<") && !string[0].startsWith("</"))
     ) {
 
       //-- Create node of that string name.
@@ -98,7 +114,7 @@ export default class Instance {
 
       //-- Add to the queue.
       this.queue.push([this.type, doc.body.children[0]]);
-    } else {
+    } else if(!string[0].startsWith('</')){
       this.queue.push([this.type, string[0]]);
     }
 
@@ -307,6 +323,8 @@ export default class Instance {
 
       if(character.startsWith('</')) {
         this.inTag = false;
+        this.next();
+        return;
       }
 
       this.insert(character, this.inTag);
