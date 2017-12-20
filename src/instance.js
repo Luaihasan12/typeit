@@ -73,14 +73,19 @@ export default class Instance {
       }
     });
 
-    console.log(this.queue);
+    // console.log(this.queue);
   }
 
+  /**
+   * Delete each character from a string.
+   * @param {string} string
+   */
   queueUpDeletions(string) {
-    //-- Delete each character from this string.
     string.split("").forEach((character) => {
       this.queue.push([this.delete, 1]);
     });
+
+    // console.log(this.queue);
   }
 
   /**
@@ -226,11 +231,6 @@ export default class Instance {
    * Inserts string to element container.
    */
   insert(content, toChildNode = false) {
-
-    // console.log('---');
-    // console.log(content);
-    // console.log(toChildNode);
-    // console.log('---');
 
     if (toChildNode) {
       this.elementContainer.lastChild.insertAdjacentHTML("beforeend", content);
@@ -488,30 +488,42 @@ export default class Instance {
     //   return;
     // }
 
-    if (this.queueIndex < this.queue.length) {
-      let thisFunc = this.queue[this.queueIndex];
-      this.queueIndex++;
+    //-- We haven't reached the end of the queue, go again.
+    if (this.queue.length > 0) {
+
+      let thisFunc = this.queue[0];
+      thisFunc[0].call(this, thisFunc[1]);
+      this.queue.shift();
+
+      console.log(this.queue);
+      console.log(this.queue.length);
 
       //-- Delay execution if looping back to the beginning of the queue.
-      if (this.isLooping && this.queueIndex === 1) {
-        setTimeout(() => {
-          thisFunc[0].call(this, thisFunc[1]);
-        }, this.options.loopDelay / 2);
-      } else {
-        thisFunc[0].call(this, thisFunc[1]);
-      }
+      // if (this.isLooping && this.queueIndex === 1) {
+      //   setTimeout(() => {
+      //     thisFunc[0].call(this, thisFunc[1]);
+      //   }, this.options.loopDelay / 2);
+      // } else {
+      //   thisFunc[0].call(this, thisFunc[1]);
+      // }
 
       return;
     }
 
     this.options.callback();
 
+    return;
+
     if (this.options.loop) {
-      this.queueIndex = 0;
+      // this.queueIndex = 0;
       this.isLooping = true;
+      this.queueUpDeletions(this.elementContainer.innerHTML);
+
+      // console.log(this.queueIndex);
 
       setTimeout(() => {
-        this.delete();
+        // this.delete();
+        this.next();
       }, this.options.loopDelay / 2);
 
     }
