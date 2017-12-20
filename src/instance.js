@@ -72,6 +72,8 @@ export default class Instance {
         this.insertPauseIntoQueue(this.queue.length);
       }
     });
+
+    // console.log(this.queue);
   }
 
   queueUpDeletions(string) {
@@ -112,7 +114,7 @@ export default class Instance {
 
       //-- Add to the queue.
       this.queue.push([this.type, doc.body.children[0]]);
-    } else if(!string[0].startsWith('</')){
+    } else {
       this.queue.push([this.type, string[0]]);
     }
 
@@ -225,6 +227,11 @@ export default class Instance {
    */
   insert(content, toChildNode = false) {
 
+    // console.log('---');
+    // console.log(content);
+    // console.log(toChildNode);
+    // console.log('---');
+
     if (toChildNode) {
       this.elementContainer.lastChild.insertAdjacentHTML("beforeend", content);
     } else {
@@ -310,8 +317,6 @@ export default class Instance {
 
   type(character) {
 
-    // console.log(character);
-
     this.timeouts[0] = setTimeout(() => {
 
       //-- We must have an HTML tag!
@@ -323,6 +328,7 @@ export default class Instance {
         return;
       }
 
+      //-- When we hit the end of the tag, turn it off!
       if(character.startsWith('</')) {
         this.inTag = false;
         this.next();
