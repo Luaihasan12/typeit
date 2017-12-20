@@ -72,8 +72,6 @@ export default class Instance {
         this.insertPauseIntoQueue(this.queue.length);
       }
     });
-
-    console.log(this.queue);
   }
 
   queueUpDeletions(string) {
@@ -311,10 +309,14 @@ export default class Instance {
   }
 
   type(character) {
+
+    // console.log(character);
+
     this.timeouts[0] = setTimeout(() => {
 
       //-- We must have an HTML tag!
       if(typeof character !== 'string') {
+        character.innerHTML = '';
         this.elementContainer.appendChild(character);
         this.inTag = true;
         this.next();
@@ -501,9 +503,11 @@ export default class Instance {
     if (this.options.loop) {
       this.queueIndex = 0;
       this.isLooping = true;
+
       setTimeout(() => {
         this.delete();
       }, this.options.loopDelay / 2);
+
     }
   }
 }
