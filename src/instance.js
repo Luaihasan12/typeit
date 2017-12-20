@@ -73,7 +73,7 @@ export default class Instance {
       }
     });
 
-    // console.log(this.queue);
+    console.log(this.queue);
   }
 
   queueUpDeletions(string) {
