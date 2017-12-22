@@ -49,7 +49,18 @@ export default class TypeIt {
   }
 
   type(string) {
-    this.pushAction("type", string);
+    this.instances.forEach(instance => {
+      instance.queueUpString(string);
+    });
+
+    return this;
+  }
+
+  delete(numCharacters = null) {
+    this.instances.forEach(instance => {
+      instance.queue.push([instance.delete, numCharacters]);
+    });
+
     return this;
   }
 
@@ -67,11 +78,6 @@ export default class TypeIt {
     });
 
     this.instances = [];
-  }
-
-  delete(numCharacters) {
-    this.pushAction("delete", numCharacters);
-    return this;
   }
 
   empty() {
@@ -98,7 +104,6 @@ export default class TypeIt {
     this.instances.forEach((instance) => {
       instance.isPaused = true;
     });
-    // this.pushAction("setOptions", options);
     return this;
   }
 }

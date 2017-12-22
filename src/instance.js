@@ -81,12 +81,16 @@ export default class Instance {
 
   /**
    * Delete each character from a string.
-   * @param {string} string
    */
-  queueUpDeletions(string) {
-    string.split("").forEach((character) => {
+  queueUpDeletions(stringOrNumber = null) {
+
+    let number = typeof stringOrNumber === "string"
+                ? stringOrNumber.length
+                : stringOrNumber;
+
+    for(let i = 0; i < number; i++) {
       this.queue.push([this.delete, 1]);
-    });
+    }
   }
 
   /**
@@ -103,9 +107,6 @@ export default class Instance {
       string = this.rake(string);
       string = string[0];
     }
-
-    //-- Randomize the timeout each time, if that's your thing.
-    this.setPace(this);
 
     //-- If an opening HTML tag is found and we're not already printing inside a tag
     if (
@@ -315,6 +316,7 @@ export default class Instance {
   }
 
   type(character) {
+    this.setPace();
 
     this.timeouts[0] = setTimeout(() => {
 
@@ -400,12 +402,13 @@ export default class Instance {
   }
 
   delete(chars = null) {
+
     this.timeouts[1] = setTimeout(() => {
       this.setPace();
 
       let textArray = this.elementContainer.innerHTML.split("");
 
-      let amount = chars === null ? textArray.length - 1 : chars + 1;
+      let amount = chars + 1;
 
       //-- Cut the array by a character.
       for (let n = textArray.length - 1; n > -1; n--) {
@@ -463,12 +466,18 @@ export default class Instance {
 
       this.elementContainer.innerHTML = textArray.join("");
 
-      //-- Characters still in the string.
-      if (amount > (chars === null ? 0 : 2)) {
-        this.delete(chars === null ? null : chars - 1);
-      } else {
-        this.next();
+      if(chars === null) {
+        this.delete(textArray.length);
+        return;
       }
+
+      if(chars > 1) {
+        this.delete(chars - 1);
+        return;
+      }
+
+      this.next();
+
     }, this.deletePace);
   }
 
