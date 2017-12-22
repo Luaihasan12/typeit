@@ -73,7 +73,9 @@ export default class Instance {
       }
     });
 
-    // console.log(this.queue);
+    console.log('Queue: ');
+    console.log(this.queue);
+    console.log('---');
   }
 
   /**
@@ -490,36 +492,28 @@ export default class Instance {
 
     //-- We haven't reached the end of the queue, go again.
     if (this.queue.length > 0) {
-
-      let thisFunc = this.queue[0];
-      thisFunc[0].call(this, thisFunc[1]);
+      let thisStep = this.queue[0];
       this.queue.shift();
 
-      console.log(this.queue);
-      console.log(this.queue.length);
-
       //-- Delay execution if looping back to the beginning of the queue.
-      // if (this.isLooping && this.queueIndex === 1) {
-      //   setTimeout(() => {
-      //     thisFunc[0].call(this, thisFunc[1]);
-      //   }, this.options.loopDelay / 2);
-      // } else {
-      //   thisFunc[0].call(this, thisFunc[1]);
-      // }
+      if (this.isLooping && this.queueIndex === 1) {
+        // setTimeout(() => {
+        //   thisStep[0].call(this, thisStep[1]);
+        // }, this.options.loopDelay / 2);
+      } else {
+        thisStep[0].call(this, thisStep[1]);
+      }
 
       return;
     }
 
     this.options.callback();
 
-    return;
-
     if (this.options.loop) {
+      //-- need to REGENERATE QUEUE!
       // this.queueIndex = 0;
       this.isLooping = true;
       this.queueUpDeletions(this.elementContainer.innerHTML);
-
-      // console.log(this.queueIndex);
 
       setTimeout(() => {
         // this.delete();

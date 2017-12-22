@@ -59,10 +59,13 @@
 		<script>
       var example1 = new TypeIt('#example1', {
         speed: 20,
-        strings: ['Greetings.'],
+        strings: ['Greetings.', 'Salutations.'],
         // loop: true,
         breakLines: true,
-        lifeLike: false
+        lifeLike: false,
+        callback: function () {
+          console.log('done!');
+        }
       });
 		</script>
 	</body>
