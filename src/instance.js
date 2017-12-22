@@ -5,7 +5,6 @@ export default class Instance {
     this.timeouts = [];
     this.id = id;
     this.queue = [];
-    this.queueIndex = 0;
     this.hasStarted = false;
     this.isPaused = false;
     this.inTag = false;
@@ -54,13 +53,19 @@ export default class Instance {
     });
   }
 
-  generateQueue() {
+  generateQueue(initialStep = null) {
+
+    initialStep = initialStep === null
+      ? [this.pause, this.options.startDelay]
+      : initialStep;
+
+    this.queue.push(initialStep);
+
     this.options.strings.forEach((string, index) => {
 
       this.queueUpString(string);
 
-      //-- This is not the last string,
-      //-- so insert a pause for between strings.
+      //-- This is not the last string,so insert a pause for between strings.
       if (index + 1 < this.options.strings.length) {
 
         if(this.options.breakLines) {
@@ -72,10 +77,6 @@ export default class Instance {
         this.insertPauseIntoQueue(this.queue.length);
       }
     });
-
-    console.log('Queue: ');
-    console.log(this.queue);
-    console.log('---');
   }
 
   /**
@@ -86,8 +87,6 @@ export default class Instance {
     string.split("").forEach((character) => {
       this.queue.push([this.delete, 1]);
     });
-
-    // console.log(this.queue);
   }
 
   /**
@@ -144,29 +143,27 @@ export default class Instance {
     this.cursor();
 
     if (this.options.autoStart) {
-      this.startQueue();
-    } else {
-      if (this.isVisible()) {
-        this.hasStarted = true;
-        this.startQueue();
-      } else {
-        let that = this;
-
-        window.addEventListener("scroll", function checkForStart(event) {
-          if (that.isVisible() && !that.hasStarted) {
-            that.hasStarted = true;
-            that.startQueue();
-            event.currentTarget.removeEventListener(event.type, checkForStart);
-          }
-        });
-      }
-    }
-  }
-
-  startQueue() {
-    setTimeout(() => {
       this.next();
-    }, this.options.startDelay);
+      return;
+
+    }
+
+    if (this.isVisible()) {
+      this.hasStarted = true;
+      this.next();
+      return;
+
+    }
+
+    let that = this;
+
+    window.addEventListener("scroll", function checkForStart(event) {
+      if (that.isVisible() && !that.hasStarted) {
+        that.hasStarted = true;
+        that.next();
+        event.currentTarget.removeEventListener(event.type, checkForStart);
+      }
+    });
   }
 
   isVisible() {
@@ -494,32 +491,19 @@ export default class Instance {
     if (this.queue.length > 0) {
       let thisStep = this.queue[0];
       this.queue.shift();
-
-      //-- Delay execution if looping back to the beginning of the queue.
-      if (this.isLooping && this.queueIndex === 1) {
-        // setTimeout(() => {
-        //   thisStep[0].call(this, thisStep[1]);
-        // }, this.options.loopDelay / 2);
-      } else {
-        thisStep[0].call(this, thisStep[1]);
-      }
-
+      thisStep[0].call(this, thisStep[1]);
       return;
     }
 
     this.options.callback();
 
     if (this.options.loop) {
-      //-- need to REGENERATE QUEUE!
-      // this.queueIndex = 0;
-      this.isLooping = true;
       this.queueUpDeletions(this.elementContainer.innerHTML);
+      this.generateQueue([this.pause, this.options.loopDelay / 2]);
 
       setTimeout(() => {
-        // this.delete();
         this.next();
       }, this.options.loopDelay / 2);
-
     }
   }
 }
