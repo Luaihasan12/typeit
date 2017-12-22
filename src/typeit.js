@@ -48,8 +48,20 @@ export default class TypeIt {
     });
   }
 
+  /**
+   * If used after typing has started, will append strings to the end of the existing queue. If used when typing is paused, will restart it.
+   * @param  {[type]} string [description]
+   * @return {[type]}        [description]
+   */
   type(string) {
-    this.instances.forEach(instance => {
+    this.instances.forEach((instance) => {
+
+      if(instance.isPaused === true) {
+        instance.isPaused = false;
+        instance.next();
+        return;
+      }
+
       instance.queueUpString(string);
     });
 
@@ -59,6 +71,27 @@ export default class TypeIt {
   delete(numCharacters = null) {
     this.instances.forEach(instance => {
       instance.queue.push([instance.delete, numCharacters]);
+    });
+
+    return this;
+  }
+
+  pause(ms = null) {
+    this.instances.forEach((instance) => {
+
+      if(instance.hasStarted === true) {
+
+        if(ms === null) {
+          instance.isPaused = true;
+          return;
+        }
+
+        //-- insert a pause at the beginning of the queue.
+        instance.queue.unshift([instance.pause, ms]);
+        return;
+      }
+
+      instance.queue.push([instance.pause, ms]);
     });
 
     return this;
@@ -85,10 +118,6 @@ export default class TypeIt {
     return this;
   }
 
-  pause(ms) {
-    this.pushAction("pause", ms);
-    return this;
-  }
 
   break() {
     this.pushAction("break");
@@ -97,13 +126,6 @@ export default class TypeIt {
 
   options(options) {
     this.pushAction("setOptions", options);
-    return this;
-  }
-
-  forcePause() {
-    this.instances.forEach((instance) => {
-      instance.isPaused = true;
-    });
     return this;
   }
 }

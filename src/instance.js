@@ -144,6 +144,7 @@ export default class Instance {
     this.cursor();
 
     if (this.options.autoStart) {
+      this.hasStarted = true;
       this.next();
       return;
 
@@ -153,7 +154,6 @@ export default class Instance {
       this.hasStarted = true;
       this.next();
       return;
-
     }
 
     let that = this;
@@ -491,10 +491,9 @@ export default class Instance {
 
   next() {
 
-    // if(this.isPaused) {
-    //   console.log('paused!');
-    //   return;
-    // }
+    if(this.isPaused) {
+      return;
+    }
 
     //-- We haven't reached the end of the queue, go again.
     if (this.queue.length > 0) {
