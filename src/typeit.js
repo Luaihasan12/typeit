@@ -50,19 +50,25 @@ export default class TypeIt {
 
   /**
    * If used after typing has started, will append strings to the end of the existing queue. If used when typing is paused, will restart it.
-   * @param  {[type]} string [description]
-   * @return {[type]}        [description]
+   *
+   * @param  {string} string The string to be typed.
+   * @return {object} TypeIt instance
    */
-  type(string) {
+  type(string = '') {
     this.instances.forEach((instance) => {
 
+      //-- if currently paused, restart the queue.
       if(instance.isPaused === true) {
         instance.isPaused = false;
         instance.next();
         return;
       }
 
-      instance.queueUpString(string);
+      //-- Tag passed string onto the end of the queue.
+      if(string) {
+        instance.queueUpString(string);
+      }
+
     });
 
     return this;
@@ -76,6 +82,12 @@ export default class TypeIt {
     return this;
   }
 
+  /**
+   * If typing has already started, pause it. Otherwise, just insert a pause action
+   *
+   * @param  {number} ms Number of milliseconds to pause
+   * @return {object} TypeIt instance
+   */
   pause(ms = null) {
     this.instances.forEach((instance) => {
 
@@ -86,7 +98,7 @@ export default class TypeIt {
           return;
         }
 
-        //-- insert a pause at the beginning of the queue.
+        //-- Insert a pause at the beginning of the queue.
         instance.queue.unshift([instance.pause, ms]);
         return;
       }
@@ -117,7 +129,6 @@ export default class TypeIt {
     this.pushAction("empty");
     return this;
   }
-
 
   break() {
     this.pushAction("break");
