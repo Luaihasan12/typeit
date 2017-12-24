@@ -11,7 +11,6 @@ The Most Versatile JavaScript Animated Typing Utility on the Planet
 * [API](#api)
     * [Options](#options)
     * [Companion Functions](#companion-functions)
-    * [Other Handy Functions](#other-handy-functions)
 * [Contribute](#contribute)
 * [License](#license)
 * [Full Documentation (offsite)](https://typeitjs.com/docs)
@@ -85,9 +84,10 @@ Example:
 ```
 
 ### Advanced Usage
-To control a typewriter effect to the smallest character, pause, speed, or more, there are six companion functions available. Simply chain them together on an instance of TypeIt, and your chain will execute. You'll be able to create a dynamic, realistic narrative with just a few lines of code.
+To control a typewriter effect to the smallest character, pause, speed, or more, there companion functions available. Simply chain them together on an instance of TypeIt, and your chain will execute. You'll be able to create a dynamic, realistic narrative with just a few lines of code.
 
-For example:
+#### Chaining on Initializing
+You may use these functions to generate a queue of typing events immediately upon creating the instance.
 
 ```js
   new TypeIt('.type-it', {
@@ -100,6 +100,60 @@ For example:
   .type('but now I am typing pretty fasst')
   .delete(2)
   .type('t!');
+```
+
+#### Pausing/Resuming Typing
+Additionally, you may use these functions to manipulate an instance well after it's been created. A common use case for this is pausing and restarting an instance.
+
+```js
+var instance = new TypeIt('#element', {
+  strings: "This is what I'm choosing to type right now."
+});
+
+//-- Pause after one second.
+setTimeout(() => {
+  instance.pause();
+}, 1000);
+
+//-- Resume after three seconds.
+setTimeout(() => {
+  instance.type();
+}, 1000);
+
+```
+
+#### Respond to User Action
+
+This is also helpful if you want your typing to respond to user action of any sort.
+
+```js
+var instance = new TypeIt('#element');
+
+document.querySelector('button').addEventListener('click', (event) => {
+  instance.type('You just clicked a button!');
+});
+
+```
+
+### Tack on Strings Later
+
+You can also use the `type()` function to add more strings onto the queue at a later time. If the instance has already finished, it will be restarted to type this string.
+
+```js
+var instance = new TypeIt('#element', {
+  strings: "What I'm first going to type."
+});
+
+//-- Pause after one second.
+setTimeout(() => {
+  instance.pause();
+}, 1000);
+
+//-- Resume after three seconds.
+setTimeout(() => {
+  instance.type("I just decided to add this on too.");
+}, 1000);
+
 ```
 
 To view these functions and how they work, see the [API](#api) section.
@@ -145,7 +199,7 @@ If you're creating several instances of TypeIt on a page, and don't wish to repe
 
 ### Companion Functions
 
-Use these functions to chain typing commands together upon initialization.
+Use these functions to chain typing commands together after creating a new instance of TypeIt.
 
 | Function        | Arguments   | Description
 | ------------- | ------------- | ------------- |
@@ -155,23 +209,7 @@ Use these functions to chain typing commands together upon initialization.
 | pause() | (number) Number of milliseconds to pause before continuing. | Will pause the specified number of milliseconds.|
 | break() | (none) | Will break the typing to a new line.|
 | options() | (JSON) Options you'd like to update | Will redefine your options on the fly. This will only work for updating the `speed`, `lifeLike`, and `html` options.|
-
-### Other Handy Functions
-
-#### Destroy an Instance
-
-| Function        | Arguments   | Description
-| ------------- | ------------- | ------------- |
 | destroy() | (bool) Whether you want to remove the cursor after destroying. Default is `true`.| Destroys the instance on whatever elements to which it's attached.
-
-```js
-var instance = new TypeIt('#id', {
-    strings: 'This is my string'
-});
-
-//-- Will preserve the cursor. If you want to destory that too, pass 'false'.
-instance.destroy();
-```
 
 ## Contribute
 
