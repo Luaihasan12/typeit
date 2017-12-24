@@ -7,7 +7,8 @@ export default class Instance {
     this.queue = [];
     this.hasStarted = false;
     this.isPaused = false;
-    this.inTag = false;
+    this.isComplete = false;
+    this.isInTag = false;
     this.stringsToDelete = "";
     this.style =
       'style="display:inline;position:relative;font:inherit;color:inherit;"';
@@ -97,6 +98,9 @@ export default class Instance {
    * Add steps to the queue for each character in a given string.
    */
   queueUpString(string, rake = true) {
+
+    if(!string) return;
+
     string = this.toArray(string);
 
     var doc = document.implementation.createHTMLDocument();
@@ -324,19 +328,19 @@ export default class Instance {
       if(typeof character !== 'string') {
         character.innerHTML = '';
         this.elementContainer.appendChild(character);
-        this.inTag = true;
+        this.isInTag = true;
         this.next();
         return;
       }
 
       //-- When we hit the end of the tag, turn it off!
       if(character.startsWith('</')) {
-        this.inTag = false;
+        this.isInTag = false;
         this.next();
         return;
       }
 
-      this.insert(character, this.inTag);
+      this.insert(character, this.isInTag);
 
       this.next();
 
@@ -512,6 +516,8 @@ export default class Instance {
       setTimeout(() => {
         this.next();
       }, this.options.loopDelay / 2);
+    } else {
+      this.isComplete = true;
     }
   }
 }

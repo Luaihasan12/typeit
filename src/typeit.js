@@ -57,6 +57,9 @@ export default class TypeIt {
   type(string = '') {
     this.instances.forEach((instance) => {
 
+      //-- Queue up a string right off the bat.
+      instance.queueUpString(string);
+
       //-- if currently paused, restart the queue.
       if(instance.isPaused === true) {
         instance.isPaused = false;
@@ -64,11 +67,10 @@ export default class TypeIt {
         return;
       }
 
-      //-- Tag passed string onto the end of the queue.
-      if(string) {
-        instance.queueUpString(string);
+      if(instance.isComplete === true) {
+        console.log('nexting...');
+        instance.next();
       }
-
     });
 
     return this;

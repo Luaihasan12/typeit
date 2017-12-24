@@ -57,7 +57,7 @@
     <script src="dist/typeit.js"></script>
 
     <script>
-      var example1 = new TypeIt('#example1', {
+      window.example1 = new TypeIt('#example1', {
         speed: 50,
         strings: ['This is my string, and you should like it!'],
         deleteSpeed: 100,
@@ -68,13 +68,13 @@
         }
       });
 
-      setTimeout(() => {
-        example1.pause();
-      }, 1000);
+      // setTimeout(() => {
+      //   example1.pause();
+      // }, 1000);
 
-      setTimeout(() => {
-        example1.type();
-      }, 3000);
+      // setTimeout(() => {
+      //   example1.type();
+      // }, 3000);
     </script>
   </body>
 </html>
