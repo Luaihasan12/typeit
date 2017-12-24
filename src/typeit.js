@@ -25,6 +25,10 @@ export default class TypeIt {
     this.createInstances();
   }
 
+  get isComplete() {
+    return this.instances[0].isComplete;
+  }
+
   generateHash() {
     return (
       Math.random()
@@ -68,7 +72,6 @@ export default class TypeIt {
       }
 
       if(instance.isComplete === true) {
-        console.log('nexting...');
         instance.next();
       }
     });
