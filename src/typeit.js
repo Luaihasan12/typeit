@@ -49,6 +49,10 @@ export default class TypeIt {
   pushAction(func, argument = null) {
     this.instances.forEach(instance => {
       instance.queue.push([instance[func], argument]);
+
+      if(instance.isComplete === true) {
+        instance.next();
+      }
     });
   }
 
@@ -80,9 +84,7 @@ export default class TypeIt {
   }
 
   delete(numCharacters = null) {
-    this.instances.forEach(instance => {
-      instance.queue.push([instance.delete, numCharacters]);
-    });
+    this.pushAction("delete", numCharacters);
 
     return this;
   }
