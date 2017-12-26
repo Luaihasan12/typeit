@@ -3,6 +3,7 @@
 The Most Versatile JavaScript Animated Typing Utility on the Planet
 
 [![Build Status](https://travis-ci.org/alexmacarthur/typeit.svg?branch=master)](https://travis-ci.org/alexmacarthur/typeit)
+[![npm downloads](https://img.shields.io/npm/dm/typeit.svg?style=flat-square)](http://npm-stat.com/charts.html?package=typeit)
 
 ## Table of Contents
 * [Overview](#overview)
@@ -103,7 +104,7 @@ You may use these functions to generate a queue of typing events immediately upo
 ```
 
 #### Pausing/Resuming Typing
-Additionally, you may use these functions to manipulate an instance well after it's been created. A common use case for this is pausing and restarting an instance.
+Additionally, you may use these functions to manipulate an instance after it's been created. A common use case for this is pausing and restarting an instance.
 
 ```js
 var instance = new TypeIt('#element', {
@@ -118,7 +119,7 @@ setTimeout(() => {
 //-- Resume after three seconds.
 setTimeout(() => {
   instance.type();
-}, 1000);
+}, 3000);
 
 ```
 
@@ -163,15 +164,13 @@ To view these functions and how they work, see the [API](#api) section.
 ### Options
 
 #### Defining Your Options
-You can modify the options for the plugin by passing in JSON.
-
-There are a number of options you may use to customize TypeIt. For more details on these options, view the <a href="https://typeitjs.com/docs">full documentation</a>.
+You can modify the options for the plugin by passing in a object.
 
 | Option        | Description   | Default Value
 | ------------- | ------------- | ------------- |
 | strings  | (string or array) The string(s) to be typed.       | 'Your default string.' |
 | speed     | (number in millseconds) The typing speed.             | 100  |
-| deleteSpeed     | (number in millseconds) The deletion speed. If left undefined, will be 1/3 of the type speed.           | undefined  |
+| deleteSpeed     | (number in millseconds) The deletion speed. If left undefined, it will be 1/3 of the type speed.           | undefined  |
 | lifeLike      | (boolean) Will make the typing pace irregular, as if a real person is doing it.  | true |
 | cursor    | (boolean) Show a blinking cursor at the end of the string(s).  | true  |
 | cursorSpeed    | (number in milliseconds) The blinking speed of the cursor.  | 1000  |
@@ -199,11 +198,11 @@ If you're creating several instances of TypeIt on a page, and don't wish to repe
 
 ### Companion Functions
 
-Use these functions to chain typing commands together after creating a new instance of TypeIt.
+Use these functions to chain typing commands together upon creating a new instance of TypeIt.
 
 | Function        | Arguments   | Description
 | ------------- | ------------- | ------------- |
-| type() | (string) Characters (including those wrapped in HTML) to be typed. | Will type the characters. |
+| type() | (string) Characters (including those wrapped in HTML) to be typed. | Will type the characters. If left blank, it will still restart an instance if it's been paused. |
 | delete() | (number) Number of characters to be deleted from what's already been typed. | Will delete the specified number of characters. |
 | empty() | (none) | Will instantly delete everything that has already been typed.
 | pause() | (number) Number of milliseconds to pause before continuing. | Will pause the specified number of milliseconds.|
