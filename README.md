@@ -85,7 +85,7 @@ Example:
 ```
 
 ### Advanced Usage
-To control a typewriter effect to the smallest character, pause, speed, or more, there companion functions available. Simply chain them together on an instance of TypeIt, and your chain will execute. You'll be able to create a dynamic, realistic narrative with just a few lines of code.
+To control a typewriter effect to the smallest character, pause, speed, or more, there companion functions available. Simply chain them together on an instance of TypeIt, and your chain will execute. You'll be able to create a dynamic, realistic narrative with just a few lines of code. To view these functions and how they work, see the [API](#api) section. For some common use cases, see directly below.
 
 #### Chaining on Initializing
 You may use these functions to generate a queue of typing events immediately upon creating the instance.
@@ -157,11 +157,20 @@ setTimeout(() => {
 
 ```
 
-To view these functions and how they work, see the [API](#api) section.
+### Check If Instance Is Complete
+At any moment, you may check if the instance is complete. Access the 'isComplete' property to do so. If `loop` is set to `true`, the instance will never be marked complete.
+
+```js
+var instance = new TypeIt('#element', { /* options... */ });
+
+if(instance.isComplete) {
+    //-- Do something.
+}
+```
 
 ## API
 
-### Options
+### Base Options
 
 #### Defining Your Options
 You can modify the options for the plugin by passing in a object.

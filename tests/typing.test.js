@@ -17,6 +17,24 @@ test('Generates a queue correctly.', () => {
 
 });
 
+test('Generates a queue correctly when chaining upon instantiation.', () => {
+  document.body.innerHTML =
+    `<div>'
+      <span id="element"></span>
+    </div>`;
+
+  const instance = new TypeIt('#element', {})
+    .type('First string.')
+    .delete()
+    .type('Second string.');
+
+  console.log(instance.queue);
+
+  instance.instances.forEach((instance) => {
+    expect(instance.queue).toHaveLength(23);
+  });
+});
+
 test('Pauses and resumes typing.', () => {
 
   jest.useFakeTimers();
@@ -98,5 +116,4 @@ test('Can type new string after completion.', () => {
   typedString = document.querySelector('#element .ti-container').innerHTML;
 
   expect(typedString).toEqual('Ham over turkey. Obviously.');
-
 });
